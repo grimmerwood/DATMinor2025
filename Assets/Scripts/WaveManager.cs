@@ -5,8 +5,8 @@ using TMPro;
 
 public class WaveManager : MonoBehaviour
 {
-    public TextMeshProUGUI waveText; // UI text to show wave announcements
-    public float announcementDuration = 2f; // Time the text stays visible
+    public TextMeshProUGUI waveText; // UI text for wave announcement
+    public float announcementDuration = 2f;
     private int waveNumber = 1;
 
     public void AnnounceWave()
@@ -16,28 +16,18 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator ShowWaveAnnouncement()
     {
+        Debug.Log("Showing wave announcement: Round " + waveNumber);
+
         if (waveText != null)
         {
             waveText.text = "Round " + waveNumber;
-            yield return StartCoroutine(FadeText(waveText, 0f, 1f, 0.5f)); // Fade in
-            yield return new WaitForSeconds(announcementDuration); // Stay visible
-            yield return StartCoroutine(FadeText(waveText, 1f, 0f, 0.5f)); // Fade out
-        }
-    }
+            waveText.color = new Color(waveText.color.r, waveText.color.g, waveText.color.b, 1f); // Ensure text is visible
+            waveText.enabled = true;
 
-    private IEnumerator FadeText(TextMeshProUGUI text, float startAlpha, float endAlpha, float duration)
-    {
-        float time = 0;
-        Color color = text.color;
+            yield return new WaitForSeconds(announcementDuration);
 
-        while (time < duration)
-        {
-            time += Time.deltaTime;
-            float alpha = Mathf.Lerp(startAlpha, endAlpha, time / duration);
-            text.color = new Color(color.r, color.g, color.b, alpha);
-            yield return null;
+            waveText.enabled = false; // Hide text after delay
         }
-        text.color = new Color(color.r, color.g, color.b, endAlpha);
     }
 
     public int GetCurrentWave()
@@ -50,4 +40,3 @@ public class WaveManager : MonoBehaviour
         waveNumber++;
     }
 }
-
