@@ -966,34 +966,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 979600414}
-  - component: {fileID: 979600413}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &979600413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 979600412}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a16ae8e67f966b4e8c7a0eff25e9ff8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 6541795408846765414, guid: f2e8c20358febc04ab6ecb150b0acdcb, type: 3}
-  enemiesPerWave: 5
-  waveDuration: 10
-  spawnInterval: 1.5
-  minX: -5
-  maxX: 5
-  spawnY: 0
-  spawnZ: 0
+  m_IsActive: 1
 --- !u!4 &979600414
 Transform:
   m_ObjectHideFlags: 0
@@ -1003,7 +982,7 @@ Transform:
   m_GameObject: {fileID: 979600412}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.7880287, y: 1.8992891, z: 9.365633}
+  m_LocalPosition: {x: -2, y: 1.8992891, z: 45.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1154,12 +1133,12 @@ GameObject:
   - component: {fileID: 2141340426}
   - component: {fileID: 2141340427}
   m_Layer: 0
-  m_Name: WaveManager
+  m_Name: WaveSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2141340426
 Transform:
   m_ObjectHideFlags: 0
@@ -1184,11 +1163,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 2141340424}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b50b278350e16d24e80490486bbbfb44, type: 3}
+  m_Script: {fileID: 11500000, guid: 3696d769391d414448a54138d82d08a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waves: []
-  spawnpoints: []
+  enemies:
+  - enemyPrefab: {fileID: 6541795408846765414, guid: f2e8c20358febc04ab6ecb150b0acdcb, type: 3}
+    cost: 2
+  currWave: 1
+  enemiesToSpawn: []
+  spawnLocation:
+  - {fileID: 979600414}
+  spawnIndex: 0
+  waveDuration: 20
+  spawnedEnemies: []
 --- !u!1001 &880874563190413443
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -177,8 +177,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6297d980d8087534798d2c890d20c929, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximumHitPoints: 1
+  maximumHitPoints: 3
   pointValue: 5
   isPlayer: 0
-  hitSound: {fileID: 0}
-  deathSound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: 8a759e6636a7e3d4392ad4aedbf153e2, type: 3}
+  deathSound: {fileID: 8300000, guid: 7b32ed1f268ff5f4584fe54a365b201b, type: 3}
