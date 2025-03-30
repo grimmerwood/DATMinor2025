@@ -76,13 +76,13 @@ PrefabInstance:
       addedObject: {fileID: 6132569810749993260}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 35d287681dc9ec34dbfc7d8f2194a645, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8288078350572905014}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 35d287681dc9ec34dbfc7d8f2194a645, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 795628765363168441}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 35d287681dc9ec34dbfc7d8f2194a645, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7386910488808131208}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 35d287681dc9ec34dbfc7d8f2194a645, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2026527228923559530}
   m_SourcePrefab: {fileID: 100100000, guid: 35d287681dc9ec34dbfc7d8f2194a645, type: 3}
 --- !u!1 &6541795408846765414 stripped
 GameObject:
@@ -137,19 +137,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5, y: 0.9, z: 2.5}
   m_Center: {x: 0, y: 0.45, z: 0}
---- !u!114 &8288078350572905014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6541795408846765414}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6aa1a234eb8c1243bbd15f9a0c3b6d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  direction: {x: 0, y: 0, z: -5}
 --- !u!114 &795628765363168441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,3 +169,18 @@ MonoBehaviour:
   isPlayer: 0
   hitSound: {fileID: 8300000, guid: 8a759e6636a7e3d4392ad4aedbf153e2, type: 3}
   deathSound: {fileID: 8300000, guid: 7b32ed1f268ff5f4584fe54a365b201b, type: 3}
+--- !u!114 &2026527228923559530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6541795408846765414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a18f75ebc8e51434fb217f01639ee155, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oscillationSpeed: 1
+  oscillationDistance: 3
+  moveDirection: {x: 0, y: 0, z: -5}
