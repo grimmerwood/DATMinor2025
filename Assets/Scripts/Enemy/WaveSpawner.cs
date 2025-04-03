@@ -28,6 +28,7 @@ public class WaveSpawner : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        //Debug.Log(spawnedEnemies.Count);
         if (spawnTimer <= 0)
         {
             //spawn an enemy
@@ -49,6 +50,7 @@ public class WaveSpawner : MonoBehaviour
             }
             else
             {
+                Debug.Log("HIERRRRRR");
                 waveTimer = 0; // if no enemies remain, end wave
             }
         }
@@ -58,7 +60,7 @@ public class WaveSpawner : MonoBehaviour
             waveTimer -= Time.fixedDeltaTime;
         }
 
-        if (waveTimer <= 0 && spawnedEnemies.Count <= 0)
+        if (waveTimer <= 0) // && spawnedEnemies.Count <= 0)
         {
             currWave++;
             GenerateWave();
