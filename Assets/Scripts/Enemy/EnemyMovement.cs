@@ -17,27 +17,49 @@ public class MoveCombined : MonoBehaviour
 
     private Vector3 startPoint, endPoint;
 
+    [Tooltip("Z position threshold after which the enemy is destroyed")]
+    public float despawnZ = -10f;  // Adjust this based on your scene
+
     void Start()
     {
         // Store the initial position
         startPoint = transform.position;
 
-        // Calculate the endpoint by moving to the right
-        endPoint = startPoint + Vector3.right * oscillationDistance;
+        // Randomize oscillation direction (left or right)
+        float direction = Random.value < 0.5f ? -1f : 1f;
 
-        // Start the oscillation coroutine
-        StartCoroutine(MoveBackAndForth());
+        // Calculate endpoint based on direction
+        endPoint = startPoint + Vector3.right * direction * oscillationDistance;
+
+        // Start oscillation after a small random delay to desynchronize enemies
+        float delay = Random.Range(0f, 2f);
+        StartCoroutine(StartOscillationWithDelay(delay));
     }
 
     void Update()
     {
         // Move the object forward continuously
         transform.position += moveDirection * Time.deltaTime;
+
+        // Move the object forward continuously
+        transform.position += moveDirection * Time.deltaTime;
+
+        // Destroy the enemy if it has passed behind the player
+        if (transform.position.z < despawnZ)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    IEnumerator StartOscillationWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        StartCoroutine(MoveBackAndForth());
     }
 
     IEnumerator MoveBackAndForth()
     {
-        while (true) // Infinite loop to keep moving back and forth
+        while (true)
         {
             yield return StartCoroutine(MoveTo(endPoint));
             yield return StartCoroutine(MoveTo(startPoint));
@@ -47,21 +69,21 @@ public class MoveCombined : MonoBehaviour
     IEnumerator MoveTo(Vector3 target)
     {
         float time = 0f;
-        Vector3 start = transform.position; // Start from the current position
+        Vector3 start = transform.position;
 
-        while (time < 1f) // Loop until movement completes
+        while (time < 1f)
         {
             time += Time.deltaTime * oscillationSpeed;
             time = Mathf.Clamp01(time);
 
-            // Move only along the X-axis while preserving the forward movement
             transform.position = new Vector3(
-                Mathf.Lerp(start.x, target.x, time), // Lerp only X movement
-                transform.position.y,               // Keep Y position the same
-                transform.position.z                // Keep forward movement unchanged
+                Mathf.Lerp(start.x, target.x, time),
+                transform.position.y,
+                transform.position.z
             );
 
-            yield return null; // Wait for the next frame
+            yield return null;
         }
     }
 }
+
