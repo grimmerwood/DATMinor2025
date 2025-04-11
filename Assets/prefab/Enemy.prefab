@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 35d287681dc9ec34dbfc7d8f2194a645, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -83,7 +87,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 35d287681dc9ec34dbfc7d8f2194a645, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2026527228923559530}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 35d287681dc9ec34dbfc7d8f2194a645, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3294355302007648967}
   m_SourcePrefab: {fileID: 100100000, guid: 35d287681dc9ec34dbfc7d8f2194a645, type: 3}
+--- !u!4 &5873521774056433628 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 35d287681dc9ec34dbfc7d8f2194a645, type: 3}
+  m_PrefabInstance: {fileID: 6199285779925729335}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6541795408846765414 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 35d287681dc9ec34dbfc7d8f2194a645, type: 3}
@@ -184,3 +196,22 @@ MonoBehaviour:
   oscillationSpeed: 1
   oscillationDistance: 3
   moveDirection: {x: 0, y: 0, z: -5}
+  despawnZ: -10
+--- !u!114 &3294355302007648967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6541795408846765414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e436f590cf03ff42a73d642f4ed3da9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 8967837404143453211, guid: 39867225c0027c54ca54e77936d89f05, type: 3}
+  firePoint: {fileID: 5873521774056433628}
+  bulletSpeed: 10
+  bulletsPerShot: 3
+  spreadAngle: 30
+  shootInterval: 1.5

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EnemyShooting : MonoBehaviour
 {
-
-
     [Header("Bullet Settings")]
     public GameObject bulletPrefab;      // The bullet to fire
     public Transform firePoint;          // Where bullets spawn from
@@ -18,7 +16,10 @@ public class EnemyShooting : MonoBehaviour
 
     void Start()
     {
-        // Start firing repeatedly every shootInterval seconds
+        // Tell Unity to never let enemy bullets collide with enemies
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("EnemyBullet"), LayerMask.NameToLayer("Enemy"));
+
+        // Start firing bullets
         InvokeRepeating("FireBullets", shootInterval, shootInterval);
     }
 
@@ -26,41 +27,38 @@ public class EnemyShooting : MonoBehaviour
     {
         if (bulletPrefab == null || firePoint == null || bulletsPerShot <= 0) return;
 
-        // If just one bullet, shoot it forward
         if (bulletsPerShot == 1)
         {
             ShootBullet(firePoint.forward);
             return;
         }
 
-        // Spread multiple bullets in a fan shape
         float angleStep = spreadAngle / (bulletsPerShot - 1);
         float startAngle = -spreadAngle / 2f;
 
         for (int i = 0; i < bulletsPerShot; i++)
         {
             float angle = startAngle + angleStep * i;
-
-            // Create a new direction by rotating the forward vector
             Vector3 direction = Quaternion.Euler(0, angle, 0) * firePoint.forward;
-
             ShootBullet(direction);
         }
     }
 
     void ShootBullet(Vector3 direction)
     {
-        // Create the bullet
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        Vector3 spawnPosition = firePoint.position + direction.normalized * 0.5f;
+        GameObject bullet = Instantiate(bulletPrefab, spawnPosition, Quaternion.identity);
 
-        // Move it forward
+        // Ensure the bullet is on the right layer
+        bullet.layer = LayerMask.NameToLayer("EnemyBullet");
+
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.velocity = direction.normalized * bulletSpeed;
         }
-
     }
 }
+
 
 
