@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 35d287681dc9ec34dbfc7d8f2194a645, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -184,3 +188,4 @@ MonoBehaviour:
   oscillationSpeed: 1
   oscillationDistance: 3
   moveDirection: {x: 0, y: 0, z: -5}
+  despawnZ: -10

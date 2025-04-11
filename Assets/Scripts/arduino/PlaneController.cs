@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlaneController : MonoBehaviour
 {
     public static PlaneController instance;
-    //public SerialPort serial = new SerialPort("/dev/tty.usbmodem21101", 9600); // Change this to your actual port
+    //public SerialPort serial = new SerialPort("/dev/tty.usbserial-2110", 9600); // Change this to your actual port
     public float moveSpeed = 3f; // Speed of movement
     public float rotationAngle = 15f; // Rotation effect
     public float moveDistance = 1.5f; // Distance to move per press
@@ -19,7 +19,7 @@ public class PlaneController : MonoBehaviour
     public SerialPort serialPort;
     public bool isReady = false;
 
-    public string port = "/dev/tty.usbmodem21101"; // making a public variable with a type tekst allows us to change the port in Unity
+    public string port = "/dev/tty.usbserial-2110"; // making a public variable with a type tekst allows us to change the port in Unity
     public int bautrate = 9600; // making a public variable with a type a whole number, allows us to change the bautrate in Unity
 
 

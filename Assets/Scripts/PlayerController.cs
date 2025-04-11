@@ -19,6 +19,11 @@ public class PlayerController : MonoBehaviour
     // A timestamp of the moment we last fired
     private float lastTimeFired;
 
+    void Awake()
+    {
+        lastTimeFired = Time.time;
+    }
+
     // Update is called once per frame
     void Update()
     {
