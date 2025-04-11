@@ -16,6 +16,13 @@ public class PlayerController : MonoBehaviour
     [Tooltip("The amount of rotation applied while the player is moving.")]
     public Vector3 rotationAmount = new Vector3(0, 45f, 0);
 
+    [Tooltip("Minimum X position the player can move to.")]
+    public float minX = -5f;
+
+    [Tooltip("Maximum X position the player can move to.")]
+    public float maxX = 5f;
+
+
     // A timestamp of the moment we last fired
     private float lastTimeFired;
 
@@ -25,6 +32,7 @@ public class PlayerController : MonoBehaviour
         // Move and rotate the player depending on what buttons we are pressing.
         Vector3 targetPosition = transform.position;
         Quaternion targetRotation = Quaternion.identity;
+
         
         if( Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A) )
         {
@@ -37,8 +45,11 @@ public class PlayerController : MonoBehaviour
             targetPosition.x += moveSpeed * Time.deltaTime;
             targetRotation = Quaternion.Euler(-rotationAmount);
         }
-        
+
+        // Clamp the position so the player doesn't go out of bounds
+        targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);
         transform.position = targetPosition;
+
         // This lerp makes the rotation smooth.
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10);
 

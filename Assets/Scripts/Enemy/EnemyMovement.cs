@@ -36,11 +36,9 @@ public class MoveCombined : MonoBehaviour
         StartCoroutine(StartOscillationWithDelay(delay));
     }
 
+
     void Update()
     {
-        // Move the object forward continuously
-        transform.position += moveDirection * Time.deltaTime;
-
         // Move the object forward continuously
         transform.position += moveDirection * Time.deltaTime;
 

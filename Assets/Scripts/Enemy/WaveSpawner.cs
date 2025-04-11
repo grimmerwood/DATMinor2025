@@ -28,6 +28,8 @@ public class WaveSpawner : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        spawnedEnemies.RemoveAll(item => item == null);
+
         //Debug.Log(spawnedEnemies.Count);
         if (spawnTimer <= 0)
         {
