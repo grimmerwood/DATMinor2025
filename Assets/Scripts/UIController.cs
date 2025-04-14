@@ -74,6 +74,15 @@ public class UIController : MonoBehaviour
         scoreText.text = scoreTextPrefix + currentScore;
     }
 
+    public void UpdatePlayerHealth(float current, float max)
+    {
+        if (healthText != null)
+        {
+            healthText.text = healthTextPrefix + current;
+        }
+    }
+
+
     public void ShowWinScreen()
     {
         winScreen.SetActive(true);

@@ -31,23 +31,27 @@ public class Hazard : MonoBehaviour
         Health health = collision.gameObject.GetComponent<Health>();
 
         // If it does, and it's a different faction...
-        if (health != null && health.isPlayer != isPlayer)
-        {
-            // Deal damage to the Health we touched!
-            health.TakeDamage(damage);
-            
-            if(deleteAfterCollision)
+
+            // Faction check
+            if (health != null && health.isPlayer != isPlayer)
             {
-                Destroy(gameObject);
+
+                // Deal damage
+                health.TakeDamage(damage);
+
+                // Destroy bullet if needed
+                if (deleteAfterCollision)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
 
         // After that, check if the thing that touched us has an InvincibleOnHit
-        InvincibleOnHit invincibleOnHit = collision.gameObject.GetComponent<InvincibleOnHit>();
+        //InvincibleOnHit invincibleOnHit = collision.gameObject.GetComponent<InvincibleOnHit>();
 
-        if(invincibleOnHit != null)
-        {
-            invincibleOnHit.InvincibleStart();
-        }
-    }
+        //if(invincibleOnHit != null)
+        //{
+        //    invincibleOnHit.InvincibleStart();
+        //}
 }

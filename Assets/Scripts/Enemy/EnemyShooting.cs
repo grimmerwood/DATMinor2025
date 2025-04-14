@@ -48,15 +48,30 @@ public class EnemyShooting : MonoBehaviour
     {
         Vector3 spawnPosition = firePoint.position + direction.normalized * 0.5f;
         GameObject bullet = Instantiate(bulletPrefab, spawnPosition, Quaternion.identity);
-
-        // Ensure the bullet is on the right layer
         bullet.layer = LayerMask.NameToLayer("EnemyBullet");
+
+
+
+        // Set up Hazard component on the bullet
+        Hazard hazard = bullet.GetComponent<Hazard>();
+        if (hazard != null)
+        {
+            hazard.isPlayer = false;                // Enemy bullet
+            hazard.damage = 1f;                     // Damage to player
+            hazard.deleteAfterCollision = true;     // Bullet disappears after hit
+        }
+
 
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.velocity = direction.normalized * bulletSpeed;
         }
+       
+        // Ensure the bullet is on the right layer
+        bullet.layer = LayerMask.NameToLayer("EnemyBullet");
+
+       
     }
 }
 

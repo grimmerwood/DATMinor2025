@@ -20,10 +20,14 @@ public class Health : MonoBehaviour
     [Tooltip("The sound to play on death. Defaults to nothing.")]
     public AudioClip deathSound;
 
-    // A private variable to keep track of our current health.
-    private float currentHitPoints;
+    [Tooltip("How long this object is invincible after taking damage.")]
+    public float invincibleDuration = 1f;
 
-    // A public function to get our current health. The UIController uses this to display how much health we have.
+    private float currentHitPoints;
+    private bool isInvincible = false;
+    private float invincibilityTimer = 0f;
+
+    // This function allows other scripts (like UIController) to check how much health we have.
     public float GetCurrentHitPoints()
     {
         return currentHitPoints;
@@ -33,58 +37,91 @@ public class Health : MonoBehaviour
     void Start()
     {
         currentHitPoints = maximumHitPoints;
-        
-        // If we don't have a collider, warn the user.
+
         if (GetComponent<Collider>() == null)
         {
             Debug.LogWarning(name + " is missing a collider!");
         }
     }
 
-    // A public function that other scripts call to damage this entity.
-    public void TakeDamage(float damageAmount)
+    // Update is called every frame. Here we update the invincibility timer.
+    void Update()
     {
-        ModifyHitPoints(-damageAmount);
+        if (isInvincible)
+        {
+            invincibilityTimer -= Time.deltaTime;
+
+            if (invincibilityTimer <= 0f)
+            {
+                isInvincible = false;
+                Debug.Log($"{gameObject.name} is no longer invincible.");
+            }
+        }
     }
 
-    //This function adds or subtracts health
-    private void ModifyHitPoints(float modAmount )
+    // This is the public function to apply damage.
+    public void TakeDamage(float damageAmount)
     {
-        // We clamp the health so it can't be less than 0 or greater than maximumHitPoints.
-        currentHitPoints = Mathf.Clamp(currentHitPoints + modAmount, 0, maximumHitPoints);
+        // If we're currently invincible, ignore the damage.
+        if (isInvincible)
+        {
+            Debug.Log($"{gameObject.name} is invincible and ignored the damage.");
+            return;
+        }
 
-        if( currentHitPoints <= 0 ) // If we have 0 health... we die!
+        ModifyHitPoints(-damageAmount);
+
+        // Activate invincibility after getting hit.
+        isInvincible = true;
+        invincibilityTimer = invincibleDuration;
+        Debug.Log($"{gameObject.name} is now invincible for {invincibleDuration} seconds.");
+    }
+
+    // This function changes our current health by a certain amount.
+    private void ModifyHitPoints(float modAmount)
+    {
+        currentHitPoints = Mathf.Clamp(currentHitPoints + modAmount, 0, maximumHitPoints);
+        Debug.Log($"{gameObject.name} now has {currentHitPoints} HP");
+
+        if (UIController.Instance != null && isPlayer)
+        {
+            UIController.Instance.UpdatePlayerHealth(currentHitPoints, maximumHitPoints);
+        }
+
+        if (currentHitPoints <= 0)
         {
             Die();
         }
-        else if( modAmount < 0 ) // If we took damage but did not die, play a sound!
+        else if (modAmount < 0)
         {
             if (hitSound != null && AudioManager.Instance != null)
             {
                 AudioManager.Instance.PlaySound(hitSound);
             }
-            // You could also add an animation here!
         }
     }
 
-    // We call this function when our health reaches 0.
+    // This function handles death.
     private void Die()
     {
-        // Play death sound.
+        Debug.Log($"{gameObject.name} died!");
+
         if (deathSound != null && AudioManager.Instance != null)
         {
             AudioManager.Instance.PlaySound(deathSound);
         }
 
-        // Give some score.
         if (UIController.Instance != null)
         {
             UIController.Instance.ChangeScore(pointValue);
         }
-        
-        // You could also add an animation here!
 
-        // Destroy this entity.
+        // If this is the player, trigger the game over screen.
+        //if (isPlayer && GameManager.Instance != null)
+        //{
+        //    GameManager.Instance.GameOver();
+        //}
+
         Destroy(gameObject);
     }
 }

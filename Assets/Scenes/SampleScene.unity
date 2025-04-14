@@ -127,7 +127,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6583646762555682390, guid: dcb2a00ad614cfc4bb357281601ff6bf, type: 3}
   m_PrefabInstance: {fileID: 8265344144366609742}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 8265344144366609743}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6297d980d8087534798d2c890d20c929, type: 3}
@@ -1442,6 +1442,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3677839685632405068, guid: dcb2a00ad614cfc4bb357281601ff6bf, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3950797479825771999, guid: dcb2a00ad614cfc4bb357281601ff6bf, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -1509,8 +1513,55 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4440511628910679909, guid: dcb2a00ad614cfc4bb357281601ff6bf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8265344144366609744}
+    - targetCorrespondingSourceObject: {fileID: 4440511628910679909, guid: dcb2a00ad614cfc4bb357281601ff6bf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8265344144366609750}
   m_SourcePrefab: {fileID: 100100000, guid: dcb2a00ad614cfc4bb357281601ff6bf, type: 3}
+--- !u!1 &8265344144366609743 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4440511628910679909, guid: dcb2a00ad614cfc4bb357281601ff6bf, type: 3}
+  m_PrefabInstance: {fileID: 8265344144366609742}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8265344144366609744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8265344144366609743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21a049d7bf018470dbd2acc5868dbd4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 8967837404143453211, guid: e682280162a10b54188503396939cdfd, type: 3}
+  spawnPoint: {fileID: 744968079}
+  moveSpeed: 3
+  rotationAmount: {x: 0, y: 45, z: 0}
+  moveDistance: 1.5
+  alertDistance: 5
+  port: /dev/tty.usbserial-2110
+  bautrate: 9600
+  KeyBoardUse: 0
+--- !u!114 &8265344144366609750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8265344144366609743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aac26b01833f1c4596c27d3e9c16d8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  isPlayer: 0
+  deleteAfterCollision: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
