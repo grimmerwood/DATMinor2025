@@ -1424,7 +1424,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 7b32ed1f268ff5f4584fe54a365b201b, type: 3}
     - target: {fileID: 7386910488808131208, guid: f2e8c20358febc04ab6ecb150b0acdcb, type: 3}
       propertyPath: maximumHitPoints
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1444,7 +1444,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3677839685632405068, guid: dcb2a00ad614cfc4bb357281601ff6bf, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3950797479825771999, guid: dcb2a00ad614cfc4bb357281601ff6bf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1533,7 +1533,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8265344144366609743}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 21a049d7bf018470dbd2acc5868dbd4d, type: 3}
   m_Name: 

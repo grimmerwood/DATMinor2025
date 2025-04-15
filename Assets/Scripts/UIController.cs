@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 
 public class UIController : MonoBehaviour
 {
@@ -33,6 +34,9 @@ public class UIController : MonoBehaviour
     // The current score.
     private int currentScore;
 
+    private bool playerIsDead = false;
+    private float restartTimer = 0f; // used for the 1 second delay
+
     // Awake is called before Start. We want to do this in case other scripts want to use UIController in their Start method.
     public void Awake()
     {
@@ -55,12 +59,29 @@ public class UIController : MonoBehaviour
 
     public void Update()
     {
-        if(playerHealth == null && loseScreen != null)
+        // If player object is missing and we haven't flagged them dead yet
+        if (playerHealth == null && !playerIsDead)
         {
+            playerIsDead = true;
+            restartTimer = 1f; // Start the delay
             loseScreen.SetActive(true);
             healthText.text = healthTextPrefix + "0";
         }
 
+        // Handle restart logic after delay
+        if (playerIsDead)
+        {
+            if (restartTimer > 0f)
+            {
+                restartTimer -= Time.deltaTime; // countdown the delay
+            }
+            else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                RestartLevel();
+            }
+        }
+
+        // Update health if player is still alive
         if (playerHealth != null)
         {
             healthText.text = healthTextPrefix + playerHealth.GetComponent<Health>().GetCurrentHitPoints();
@@ -80,6 +101,12 @@ public class UIController : MonoBehaviour
         {
             healthText.text = healthTextPrefix + current;
         }
+    }
+
+    public void RestartLevel()
+    {
+        // Reloads the currently active scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
 
