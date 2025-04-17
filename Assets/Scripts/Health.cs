@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Health : MonoBehaviour
 {
+    private PlaneControllerUnified playerController;
     [Tooltip("How much damage this entity takes before it dies.")]
     public float maximumHitPoints = 3;
 
@@ -37,6 +38,18 @@ public class Health : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        currentHitPoints = maximumHitPoints;
+
+    if (GetComponent<Collider>() == null)
+    {
+        Debug.LogWarning(name + " is missing a collider!");
+    }
+
+    // Link to the player's controller if this is the player
+    if (isPlayer)
+    {
+        playerController = FindObjectOfType<PlaneControllerUnified>();
+    }
         currentHitPoints = maximumHitPoints;
 
         if (GetComponent<Collider>() == null)
@@ -122,25 +135,25 @@ public class Health : MonoBehaviour
     {
         Debug.Log($"{gameObject.name} died!");
 
-        if (deathSound != null && AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlaySound(deathSound);
-        }
-
-        if (UIController.Instance != null)
-        {
-            UIController.Instance.ChangeScore(pointValue);
-        }
-
-        // If this is the player, trigger the game over screen.
-        //if (isPlayer && GameManager.Instance != null)
-        //{
-        //    GameManager.Instance.GameOver();
-        //}
-
-        Destroy(gameObject);
+    if (deathSound != null && AudioManager.Instance != null)
+    {
+        AudioManager.Instance.PlaySound(deathSound);
     }
 
+    if (UIController.Instance != null)
+    {
+        UIController.Instance.ChangeScore(pointValue);
+    }
+
+    if (isPlayer && playerController != null)
+    {
+        playerController.isPlayerAlive = false;
+    }
+    else
+    {
+        Destroy(gameObject);
+    }
+    }
     internal void AddHealth(int healAmount)
     {
         throw new NotImplementedException();
