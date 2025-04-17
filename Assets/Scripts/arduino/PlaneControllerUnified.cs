@@ -22,6 +22,14 @@ public class PlaneControllerUnified : MonoBehaviour
 
     [SerializeField]
     private bool KeyBoardUse = false;
+    
+    public static PlaneControllerUnified instance;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
 
     void Start()
     {
@@ -161,14 +169,14 @@ public class PlaneControllerUnified : MonoBehaviour
 
     public void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.CompareTag("Obstacle"))
+        if (col.gameObject.CompareTag("Energy"))
         {
             Debug.Log("C");
             SendSerialCommand("C");
         }
     }
 
-    void SendSerialCommand(string command)
+    public void SendSerialCommand(string command)
     {
         if (serialPort != null && serialPort.IsOpen)
         {

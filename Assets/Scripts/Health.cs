@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -77,6 +78,20 @@ public class Health : MonoBehaviour
         Debug.Log($"{gameObject.name} is now invincible for {invincibleDuration} seconds.");
     }
 
+    public void Heal(float healAmount)
+    {
+        ModifyHitPoints(healAmount);
+    }
+    public void ResetHealth()
+    {
+    currentHitPoints = maximumHitPoints;
+
+    if (UIController.Instance != null && isPlayer)
+    {
+        UIController.Instance.UpdatePlayerHealth(currentHitPoints, maximumHitPoints);
+    }
+}
+    //This function adds or subtracts health
     // This function changes our current health by a certain amount.
     private void ModifyHitPoints(float modAmount)
     {
@@ -101,6 +116,7 @@ public class Health : MonoBehaviour
         }
     }
 
+    
     // This function handles death.
     private void Die()
     {
@@ -123,5 +139,10 @@ public class Health : MonoBehaviour
         //}
 
         Destroy(gameObject);
+    }
+
+    internal void AddHealth(int healAmount)
+    {
+        throw new NotImplementedException();
     }
 }

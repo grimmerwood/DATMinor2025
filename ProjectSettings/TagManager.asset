@@ -5,17 +5,18 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Energy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - 
   - Enemy
   - EnemyBullet
-  - 
+  - Pickup
   - 
   - 
   - 

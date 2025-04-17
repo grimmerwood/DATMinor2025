@@ -82,9 +82,9 @@ public class UIController : MonoBehaviour
         }
 
         // Update health if player is still alive
-        if (playerHealth != null)
+        //if (playerHealth != null)
         {
-            healthText.text = healthTextPrefix + playerHealth.GetComponent<Health>().GetCurrentHitPoints();
+           // healthText.text = healthTextPrefix + playerHealth.GetComponent<Health>().GetCurrentHitPoints();
         }
     }
 
@@ -99,14 +99,20 @@ public class UIController : MonoBehaviour
     {
         if (healthText != null)
         {
-            healthText.text = healthTextPrefix + current;
+            healthText.text = healthTextPrefix + current.ToString("0");
         }
     }
 
     public void RestartLevel()
     {
+        if (playerHealth != null)
+    {
+        playerHealth.ResetHealth();
+    }
+
+    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         // Reloads the currently active scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
 

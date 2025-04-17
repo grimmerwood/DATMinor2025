@@ -119,7 +119,7 @@ public class PlaneController : MonoBehaviour
     }
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.CompareTag("Obstacle"))
+        if (col.gameObject.CompareTag("Energy"))
         {
             PlayCrashSound();
         }
