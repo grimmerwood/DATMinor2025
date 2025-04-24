@@ -5,7 +5,9 @@ using UnityEngine;
 public class SendToSerialOnStart : MonoBehaviour
 {
     private SerialPortManager spManager; // Get access to the serialport defined in the SerialPortManager    
-    string messageToSerial = "A"; // What message to send to the serialPort
+
+     [Header("Message to send to the serialPort on Start")]
+    public string messageToSerial; // What message to send to the serialPort
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +39,7 @@ public class SendToSerialOnStart : MonoBehaviour
             Debug.Log("Waiting before sending data...");
             yield return null;  // Wait a frame and try again
         }
-        if (spManager.serialPort != null && spManager.serialPort.IsOpen)
+        if (spManager.serialPort != null && spManager.serialPort.IsOpen && !string.IsNullOrWhiteSpace(message))
         {
             try
             {
@@ -52,7 +54,7 @@ public class SendToSerialOnStart : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Serial port is not open!");
+            Debug.LogWarning("Serial port is not open! or there is no message to send");
         }
     }
 

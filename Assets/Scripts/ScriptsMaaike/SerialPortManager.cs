@@ -11,7 +11,9 @@ public class SerialPortManager : MonoBehaviour
     public string port = "/dev/tty.usbserial-11240"; // making a public variable with a type tekst allows us to change the port in Unity
     public int bautrate = 9600; // making a public variable with a type a whole number, allows us to change the bautrate in Unity
 
-
+    [Header("Message to send to the serialPort on Close")]
+    public string messageToSerial; // What message to send to the serialPort
+    
     void Awake()
     {
         // Singleton pattern, so there is only one instance
@@ -36,7 +38,7 @@ public class SerialPortManager : MonoBehaviour
     {
         serialPort = new SerialPort(port, bautrate)
         {
-            ReadTimeout = 100, // Optional: prevents ReadLine() from sticking
+            ReadTimeout = 1000, // Optional: prevents ReadLine() from sticking
             WriteTimeout = 100 // Optional: prevents Write() from sticking
         };
         serialPort.Open(); //this opens the serial port
@@ -52,16 +54,29 @@ public class SerialPortManager : MonoBehaviour
     }
 
 
-    void OnApplicationQuit()
-    {
-        if (serialPort != null && serialPort.IsOpen)
-        {
-            // Closes the thread and serial port and turns light off when the game ends
-            serialPort.Write("B");
-            // Close the serial port on exit
 
-            serialPort.Close();
-            Debug.Log("Serial port closed!");
+void OnApplicationQuit()
+{
+    if (serialPort != null && serialPort.IsOpen)
+    {
+        if (!string.IsNullOrWhiteSpace(messageToSerial))
+        {
+            try
+            {
+                serialPort.Write(messageToSerial);
+                serialPort.BaseStream.Flush(); // Optional but clean
+                Debug.Log("Message sent before closing: " + messageToSerial);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning("Failed to send message on quit: " + e.Message);
+            }
         }
+
+        serialPort.Close();
+        Debug.Log("Serial port closed!");
     }
+}
+
+
 }
