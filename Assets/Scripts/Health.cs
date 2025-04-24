@@ -29,6 +29,9 @@ public class Health : MonoBehaviour
     private bool isInvincible = false;
     private float invincibilityTimer = 0f;
 
+    private bool isDead = false;
+    private UIController ui;
+
     // This function allows other scripts (like UIController) to check how much health we have.
     public float GetCurrentHitPoints()
     {
@@ -51,12 +54,20 @@ public class Health : MonoBehaviour
         playerController = FindObjectOfType<PlaneControllerUnified>();
     }
         currentHitPoints = maximumHitPoints;
+        
+        if (playerController == null)
+   {
+    Debug.LogWarning("PlayerController (PlaneControllerUnified) not found!");
+   }
 
         if (GetComponent<Collider>() == null)
         {
             Debug.LogWarning(name + " is missing a collider!");
         }
+        
+        ui = UIController.Instance;  // Only get once
     }
+    
 
     // Update is called every frame. Here we update the invincibility timer.
     void Update()
@@ -77,6 +88,8 @@ public class Health : MonoBehaviour
     public void TakeDamage(float damageAmount)
     {
         // If we're currently invincible, ignore the damage.
+        if (isDead) return;
+
         if (isInvincible)
         {
             Debug.Log($"{gameObject.name} is invincible and ignored the damage.");
@@ -93,16 +106,29 @@ public class Health : MonoBehaviour
 
     public void Heal(float healAmount)
     {
+        if (isDead) return;
+
         ModifyHitPoints(healAmount);
     }
     public void ResetHealth()
     {
-    currentHitPoints = maximumHitPoints;
+        isDead = false;
+        currentHitPoints = maximumHitPoints;
+        isInvincible = false;
+        invincibilityTimer = 0f;
 
-    if (UIController.Instance != null && isPlayer)
+    if (ui != null && isPlayer)
     {
-        UIController.Instance.UpdatePlayerHealth(currentHitPoints, maximumHitPoints);
+        ui.UpdatePlayerHealth(currentHitPoints, maximumHitPoints);
     }
+
+    if (playerController != null)
+    {
+        playerController.enabled = true;
+        playerController.isPlayerAlive = true;
+    }
+
+
 }
     //This function adds or subtracts health
     // This function changes our current health by a certain amount.
@@ -111,9 +137,9 @@ public class Health : MonoBehaviour
         currentHitPoints = Mathf.Clamp(currentHitPoints + modAmount, 0, maximumHitPoints);
         Debug.Log($"{gameObject.name} now has {currentHitPoints} HP");
 
-        if (UIController.Instance != null && isPlayer)
+        if (ui != null && isPlayer)
         {
-            UIController.Instance.UpdatePlayerHealth(currentHitPoints, maximumHitPoints);
+            ui.UpdatePlayerHealth(currentHitPoints, maximumHitPoints);
         }
 
         if (currentHitPoints <= 0)
@@ -133,6 +159,7 @@ public class Health : MonoBehaviour
     // This function handles death.
     private void Die()
     {
+        isDead = true;
         Debug.Log($"{gameObject.name} died!");
 
     if (deathSound != null && AudioManager.Instance != null)
@@ -140,15 +167,21 @@ public class Health : MonoBehaviour
         AudioManager.Instance.PlaySound(deathSound);
     }
 
-    if (UIController.Instance != null)
+    if (ui != null)
     {
-        UIController.Instance.ChangeScore(pointValue);
+        ui.ChangeScore(pointValue);
+        if (isPlayer)
+        {
+            ui.ShowGameOverScreen(); 
+        }
     }
 
-    if (isPlayer && playerController != null)
+    if (isPlayer)
     {
-        playerController.isPlayerAlive = false;
+       playerController.isPlayerAlive = false;
+       playerController.enabled = false; 
     }
+    
     else
     {
         Destroy(gameObject);
@@ -157,5 +190,14 @@ public class Health : MonoBehaviour
     internal void AddHealth(int healAmount)
     {
         throw new NotImplementedException();
+         //Heal(healAmount);
     }
+    public bool IsDead()
+    {
+        return isDead;
+    }
+
+
 }
+
+

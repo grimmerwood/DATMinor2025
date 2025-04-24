@@ -8,7 +8,9 @@ using UnityEngine.SceneManagement;
 public class UIController : MonoBehaviour
 {
     // This is a static variable. It can be accessed from any other script, and there is only one. This is called a "singleton".
-    public static UIController Instance { get; private set; }
+    public static UIController Instance;
+     public GameObject restartButton;
+     public GameObject gameOverText;
 
     [Tooltip("A reference to the player's Health component.")]
     public Health playerHealth;
@@ -34,19 +36,23 @@ public class UIController : MonoBehaviour
     // The current score.
     private int currentScore;
 
+    public GameObject gameOverPanel;
+    
+
     private bool playerIsDead = false;
     private float restartTimer = 0f; // used for the 1 second delay
 
     // Awake is called before Start. We want to do this in case other scripts want to use UIController in their Start method.
     public void Awake()
     {
-        if (Instance != null && Instance != this)
+        // Singleton setup
+        if (Instance == null)
         {
-            Destroy(this);
+            Instance = this;
         }
         else
         {
-            Instance = this;
+            Destroy(gameObject);
         }
     }
 
@@ -55,6 +61,11 @@ public class UIController : MonoBehaviour
         winScreen.SetActive(false);
         loseScreen.SetActive(false);
         scoreText.text = scoreTextPrefix + currentScore;
+
+        if (playerHealth == null)
+    {
+        playerHealth = FindObjectOfType<Health>();
+    }
     }
 
     public void Update()
@@ -103,13 +114,31 @@ public class UIController : MonoBehaviour
         }
     }
 
+    public void ShowGameOverScreen()
+{
+    if (gameOverPanel != null)
+    {
+        gameOverPanel.SetActive(true);
+    }
+}
     public void RestartLevel()
     {
-        if (playerHealth != null)
+       // Reset score
+       currentScore = 0;
+       scoreText.text = scoreTextPrefix + currentScore;
+
+      // Reset player death flag
+      playerIsDead = false;
+      restartTimer = 0f;
+
+       playerHealth = FindObjectOfType<Health>(); // Reassign after reload
+      // Reset player health
+      if (playerHealth != null)
     {
-        playerHealth.ResetHealth();
+          playerHealth.ResetHealth();  // Make sure this resets player health correctly
     }
 
+    // Reload the current scene
     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         // Reloads the currently active scene
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

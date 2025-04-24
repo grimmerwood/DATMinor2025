@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO.Ports;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlaneControllerUnified : MonoBehaviour
 {
@@ -16,12 +17,17 @@ public class PlaneControllerUnified : MonoBehaviour
     public int bautrate = 9600;
 
     private SerialPort serialPort;
+    private PlaneControllerUnified playerController;
     private float lastTimeFired;
+    private GameObject[] enemies;      // Cache enemy list
+    private float enemyRefreshRate = 2f;  // Refresh every 2 seconds
+    private float lastEnemyRefreshTime;
     private bool alerted = false;
     private Quaternion startRotation;
 
     [SerializeField]
     private bool KeyBoardUse = false;
+    public bool isPlayerAlive = true;
     
     public static PlaneControllerUnified instance;
 
@@ -37,8 +43,14 @@ public class PlaneControllerUnified : MonoBehaviour
         
         startRotation = transform.rotation;
         StartCoroutine(OpenSerialPort());
-    }
 
+        RefreshEnemies(); // Initial cache
+        lastEnemyRefreshTime = Time.time;
+    }
+    void RefreshEnemies()
+    {
+    enemies = GameObject.FindGameObjectsWithTag("Enemy");
+    }
     IEnumerator OpenSerialPort()
     {
         serialPort = new SerialPort(port, bautrate)
@@ -62,11 +74,27 @@ public class PlaneControllerUnified : MonoBehaviour
 
     void Update()
     {
-        if(KeyBoardUse){
-            HandleKeyboardInput();
-        }else HandleSerialInput();
-        
-        DetectEnemyProximity();
+        if (!isPlayerAlive)
+    {
+        // Accept restart from either keyboard or serial input
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Restart key detected");
+            UIController.Instance.RestartLevel();
+        }
+        return; // Prevent further input when dead
+    }
+
+    if (KeyBoardUse)
+    {
+        HandleKeyboardInput();
+    }
+    else
+    {
+        HandleSerialInput();
+    }
+
+    DetectEnemyProximity();
     }
 
     void Fire()
@@ -94,38 +122,56 @@ public class PlaneControllerUnified : MonoBehaviour
 
     void HandleKeyboardInput()
     {
-        Vector3 newPosition = transform.position;
-        Quaternion targetRotation = Quaternion.identity;
-
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        if (!isPlayerAlive) // If the player is dead
         {
-            newPosition.x -= moveSpeed * Time.deltaTime;
-            targetRotation = Quaternion.Euler(-rotationAmount);
-            SendSerialCommand("L");
+            if (Input.GetKey(KeyCode.Space)) // Space bar to restart when dead
+            {
+              UIController.Instance.RestartLevel();
+            } 
         }
-
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+        else // If the player is alive
         {
-            newPosition.x += moveSpeed * Time.deltaTime;
-            targetRotation = Quaternion.Euler(rotationAmount);
-            SendSerialCommand("R");
-        }
+           Vector3 newPosition = transform.position;
+           Quaternion targetRotation = Quaternion.identity;
 
-        transform.position = newPosition;
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10);
+           if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+           {
+              newPosition.x -= moveSpeed * Time.deltaTime;
+              targetRotation = Quaternion.Euler(-rotationAmount);
+              SendSerialCommand("L");
+           }
 
-        if (Input.GetKey(KeyCode.Space))
-        {
+           if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+           {
+              newPosition.x += moveSpeed * Time.deltaTime;
+              targetRotation = Quaternion.Euler(rotationAmount);
+              SendSerialCommand("R");
+           }
+
+           transform.position = newPosition;
+           if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A) || 
+              Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+           {
+              transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10);
+           }
+           else
+          {
+            transform.rotation = Quaternion.Lerp(transform.rotation, startRotation, Time.deltaTime * 10);
+          }
+
+          if (Input.GetKey(KeyCode.Space))
+          {
             Fire();
+          }
         }
-    }
+   }
 
     void HandleSerialInput()
     {
         if (serialPort != null && serialPort.IsOpen && serialPort.BytesToRead > 0)
         {
-            try
-            {
+          try
+          {
             string data = serialPort.ReadLine().Trim();
             Debug.Log("Arduino says: " + data);
 
@@ -136,18 +182,37 @@ public class PlaneControllerUnified : MonoBehaviour
                 transform.position += Vector3.right * moveDistance;
 
             else if (data == "S")  // 💥 Arduino shoot signal
-                Fire();
+            {
+                if (isPlayerAlive)
+                {
+                    Fire();
+                }
+                else
+                {
+                    UIController.Instance.RestartLevel(); // If player is dead, restart the game
+                }
             }
+          } 
             catch { }
         }
     }
+    
     void DetectEnemyProximity()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        // Refresh enemy list every few seconds
+       if (Time.time - lastEnemyRefreshTime > enemyRefreshRate)
+       {
+         RefreshEnemies();
+         lastEnemyRefreshTime = Time.time;
+       }
+        if (enemies == null || enemies.Length == 0) return;
+        
         bool anyEnemyClose = false;
 
         foreach (var enemy in enemies)
         {
+            if (enemy == null) continue;
+            
             float distance = Vector3.Distance(transform.position, enemy.transform.position);
             if (distance < alertDistance)
             {
@@ -175,6 +240,7 @@ public class PlaneControllerUnified : MonoBehaviour
             SendSerialCommand("C");
         }
     }
+    
 
     public void SendSerialCommand(string command)
     {

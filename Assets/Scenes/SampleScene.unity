@@ -555,6 +555,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dea0e321b6eaae347827a6bfe19b440e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  restartButton: {fileID: 0}
+  gameOverText: {fileID: 0}
   playerHealth: {fileID: 233240245}
   scoreText: {fileID: 561713528}
   scoreTextPrefix: 'SCORE: '
@@ -562,6 +564,7 @@ MonoBehaviour:
   healthTextPrefix: 'HEALTH: '
   winScreen: {fileID: 0}
   loseScreen: {fileID: 0}
+  gameOverPanel: {fileID: 0}
 --- !u!1 &640581491
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,7 +640,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &663219201
 Transform:
   m_ObjectHideFlags: 0
@@ -1835,7 +1838,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemies:
   - enemyPrefab: {fileID: 6541795408846765414, guid: f2e8c20358febc04ab6ecb150b0acdcb, type: 3}
-    cost: 2
+    cost: 5
   currWave: 1
   enemiesToSpawn: []
   spawnLocation:
@@ -2203,6 +2206,7 @@ MonoBehaviour:
   port: /dev/tty.usbserial-2110
   bautrate: 9600
   KeyBoardUse: 1
+  isPlayerAlive: 1
 --- !u!114 &8265344144366609750
 MonoBehaviour:
   m_ObjectHideFlags: 0
