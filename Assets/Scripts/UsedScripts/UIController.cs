@@ -37,6 +37,24 @@ public class UIController : MonoBehaviour
     private bool playerIsDead = false;
     private float restartTimer = 0f; // used for the 1 second delay
 
+    private bool restartTriggeredFromSerial = false;
+
+    void OnEnable()
+{
+    ReceiveFromSerial.SerialDataReceived += OnSerialInput;
+}
+
+void OnDisable()
+{
+    ReceiveFromSerial.SerialDataReceived -= OnSerialInput;
+}
+void OnSerialInput(int value)
+{
+    if (playerIsDead)
+    {
+        restartTriggeredFromSerial = true;
+    }
+}
     // Awake is called before Start. We want to do this in case other scripts want to use UIController in their Start method.
     public void Awake()
     {
@@ -69,17 +87,29 @@ public class UIController : MonoBehaviour
         }
 
         // Handle restart logic after delay
+        // if (playerIsDead)
+        // {
+        //     if (restartTimer > 0f)
+        //     {
+        //         restartTimer -= Time.deltaTime; // countdown the delay
+        //     }
+        //     else if (Input.GetKeyDown(KeyCode.Space))
+        //     {
+        //         RestartLevel();
+        //     }
+        // }
         if (playerIsDead)
-        {
-            if (restartTimer > 0f)
-            {
-                restartTimer -= Time.deltaTime; // countdown the delay
-            }
-            else if (Input.GetKeyDown(KeyCode.Space))
-            {
-                RestartLevel();
-            }
-        }
+{
+    if (restartTimer > 0f)
+    {
+        restartTimer -= Time.deltaTime;
+    }
+    else if (restartTriggeredFromSerial)
+    {
+        RestartLevel();
+        restartTriggeredFromSerial = false; // Reset the flag
+    }
+}
 
         // Update health if player is still alive
         //if (playerHealth != null)
