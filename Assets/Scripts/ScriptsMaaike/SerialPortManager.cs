@@ -38,7 +38,7 @@ public class SerialPortManager : MonoBehaviour
     {
         serialPort = new SerialPort(port, bautrate)
         {
-            ReadTimeout = 1000, // Optional: prevents ReadLine() from sticking
+            ReadTimeout = 2000, // Optional: prevents ReadLine() from sticking
             WriteTimeout = 100 // Optional: prevents Write() from sticking
         };
         serialPort.Open(); //this opens the serial port

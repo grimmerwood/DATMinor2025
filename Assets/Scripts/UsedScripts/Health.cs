@@ -34,6 +34,7 @@ public class Health : MonoBehaviour
     {
         return currentHitPoints;
     }
+    
 
     // Start is called before the first frame update
     void Start()
@@ -50,12 +51,6 @@ public class Health : MonoBehaviour
     {
         playerController = FindObjectOfType<PlaneControllerUnified>();
     }
-        currentHitPoints = maximumHitPoints;
-
-        if (GetComponent<Collider>() == null)
-        {
-            Debug.LogWarning(name + " is missing a collider!");
-        }
     }
 
     // Update is called every frame. Here we update the invincibility timer.
@@ -143,6 +138,11 @@ public class Health : MonoBehaviour
     if (UIController.Instance != null)
     {
         UIController.Instance.ChangeScore(pointValue);
+
+        if (isPlayer)
+        {
+            UIController.Instance.PlayerDied(); // 🔴 New line: Notify UIController
+        }
     }
 
     if (isPlayer && playerController != null)
@@ -158,4 +158,10 @@ public class Health : MonoBehaviour
     {
         throw new NotImplementedException();
     }
+
+    public bool IsDead()
+   { 
+    return currentHitPoints <= 0;
+   }
+   
 }

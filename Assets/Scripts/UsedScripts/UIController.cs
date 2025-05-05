@@ -40,21 +40,22 @@ public class UIController : MonoBehaviour
     private bool restartTriggeredFromSerial = false;
 
     void OnEnable()
-{
-    ReceiveFromSerial.SerialDataReceived += OnSerialInput;
-}
-
-void OnDisable()
-{
-    ReceiveFromSerial.SerialDataReceived -= OnSerialInput;
-}
-void OnSerialInput(int value)
-{
-    if (playerIsDead)
     {
-        restartTriggeredFromSerial = true;
-    }
-}
+        ReceiveFromSerial.SerialDataReceived += OnSerialInput;
+     }
+
+    void OnDisable()
+    {
+         ReceiveFromSerial.SerialDataReceived -= OnSerialInput;
+     }
+     void OnSerialInput(int value)
+     {
+         if (playerIsDead)
+         {
+             Debug.Log("Restart triggered from Arduino.");
+             restartTriggeredFromSerial = true;
+         }
+     }
     // Awake is called before Start. We want to do this in case other scripts want to use UIController in their Start method.
     public void Awake()
     {
@@ -77,48 +78,43 @@ void OnSerialInput(int value)
 
     public void Update()
     {
-        // If player object is missing and we haven't flagged them dead yet
-        if (playerHealth == null && !playerIsDead)
-        {
-            playerIsDead = true;
-            restartTimer = 1f; // Start the delay
-            loseScreen.SetActive(true);
-            healthText.text = healthTextPrefix + "0";
-        }
-
+       
         // Handle restart logic after delay
-        // if (playerIsDead)
-        // {
-        //     if (restartTimer > 0f)
-        //     {
-        //         restartTimer -= Time.deltaTime; // countdown the delay
-        //     }
-        //     else if (Input.GetKeyDown(KeyCode.Space))
-        //     {
-        //         RestartLevel();
-        //     }
-        // }
+        
         if (playerIsDead)
-{
-    if (restartTimer > 0f)
-    {
-        restartTimer -= Time.deltaTime;
-    }
-    else if (restartTriggeredFromSerial)
-    {
-        RestartLevel();
-        restartTriggeredFromSerial = false; // Reset the flag
-    }
-}
+        {
+            if (restartTimer > 0f)
+            {
+                restartTimer -= Time.deltaTime; // countdown the delay
+            }
+            else if (Input.GetKeyDown(KeyCode.Space) || restartTriggeredFromSerial)
+            {
+                restartTriggeredFromSerial = false; // Reset the flag
+                RestartLevel();
+            }
+        }
+    
+        
 
         // Update health if player is still alive
         //if (playerHealth != null)
         {
-           // healthText.text = healthTextPrefix + playerHealth.GetComponent<Health>().GetCurrentHitPoints();
+            // healthText.text = healthTextPrefix + playerHealth.GetComponent<Health>().GetCurrentHitPoints();
         }
     }
 
     // Start is called before the first frame update
+
+
+    public void PlayerDied()
+    {
+    playerIsDead = true;
+    restartTimer = 1f;
+    loseScreen.SetActive(true);
+    healthText.text = healthTextPrefix + "0";
+    }
+
+
     public void ChangeScore(int scoreChange)
     {
         currentScore += scoreChange;
@@ -136,11 +132,11 @@ void OnSerialInput(int value)
     public void RestartLevel()
     {
         if (playerHealth != null)
-    {
-        playerHealth.ResetHealth();
-    }
+        {
+            playerHealth.ResetHealth();
+        }
 
-    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         // Reloads the currently active scene
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

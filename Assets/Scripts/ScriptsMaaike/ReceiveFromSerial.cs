@@ -67,11 +67,18 @@ public class ReceiveFromSerial : MonoBehaviour
 
             try
             {
-                string value = spManager.serialPort.ReadLine(); // Read serial data
-                int intValue = int.Parse(value); // Convert string to integer
-                received = intValue;
-                Debug.Log("received: " + received);
-                SerialDataReceived?.Invoke(intValue);
+                string value = spManager.serialPort.ReadLine().Trim(); // Read serial data
+                if (int.TryParse(value, out int intValue))
+                {
+                   received = intValue;
+                   Debug.Log("received: " + received);
+                   SerialDataReceived?.Invoke(intValue); // Fire movement/fire action
+                }
+              
+                else
+                {
+                   Debug.Log("Received non-int message: " + value);  // You can extend logic here later
+                }
 
 
             }

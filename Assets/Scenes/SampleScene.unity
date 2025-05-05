@@ -230,7 +230,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 8265344144366609742}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8265344144366609743}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6297d980d8087534798d2c890d20c929, type: 3}
   m_Name: 
@@ -608,7 +608,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isReady: 0
-  port: /dev/tty.usbmodem12201
+  port: /dev/tty.usbserial-2110
   bautrate: 9600
   messageToSerial: 
 --- !u!114 &640581495
@@ -716,7 +716,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Health:3
+  m_text: Health:5
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6d2599d491a8013469d6db3573509ab9, type: 2}
   m_sharedMaterial: {fileID: 6784606286396256217, guid: 6d2599d491a8013469d6db3573509ab9, type: 2}
@@ -1403,7 +1403,7 @@ MonoBehaviour:
   spawnAreaMin: {fileID: 1972451541}
   spawnAreaMax: {fileID: 1099635162}
   energyPrefab: {fileID: 1263970072}
-  maxEnergyOnScene: 20
+  maxEnergyOnScene: 50
   spawnInterval: 2
 --- !u!1 &1416379636
 GameObject:
@@ -1712,8 +1712,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 8967837404143453211, guid: 39867225c0027c54ca54e77936d89f05, type: 3}
   firePoint: {fileID: 1934733171}
-  bulletSpeed: 10
-  bulletsPerShot: 3
+  bulletSpeed: 9.36
+  bulletsPerShot: 1
   spreadAngle: 30
   shootInterval: 1.5
 --- !u!1 &1972451540
@@ -2204,7 +2204,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 8a759e6636a7e3d4392ad4aedbf153e2, type: 3}
     - target: {fileID: 6583646762555682390, guid: dcb2a00ad614cfc4bb357281601ff6bf, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6583646762555682390, guid: dcb2a00ad614cfc4bb357281601ff6bf, type: 3}
       propertyPath: deathSound
@@ -2216,7 +2216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6583646762555682390, guid: dcb2a00ad614cfc4bb357281601ff6bf, type: 3}
       propertyPath: maximumHitPoints
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3677839685632405068, guid: dcb2a00ad614cfc4bb357281601ff6bf, type: 3}
@@ -2250,7 +2250,7 @@ MonoBehaviour:
   value: 0
   projectilePrefab: {fileID: 8967837404143453211, guid: e682280162a10b54188503396939cdfd, type: 3}
   spawnPoint: {fileID: 744968079}
-  moveSpeed: 3
+  moveSpeed: 5
   rotationAmount: {x: 0, y: 45, z: 0}
   moveDistance: 1.5
   alertDistance: 5

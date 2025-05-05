@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
 
 
 public class PlaneControllerUnified : MonoBehaviour
@@ -27,14 +28,22 @@ public class PlaneControllerUnified : MonoBehaviour
     public bool isPlayerAlive = true;
     private float lastSentTime; // Time of last transmission
 
+    private Health healthScript;
 
-
-
+    private Vector3 moveTarget;
+    private bool isMoving = false;
+    private float lastInputTime; // To handle debouncing in Unity side
+    private float lastSerialInputTime = 0f;
+    
+    private List<GameObject> enemies = new List<GameObject>();
     void Start()
     {
+        healthScript = GetComponent<Health>();
         lastTimeFired = Time.time;
         startRotation = transform.rotation;
-
+        lastInputTime = Time.time; // Initialize last input time
+        
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
     }
 
 
@@ -45,8 +54,17 @@ public class PlaneControllerUnified : MonoBehaviour
             HandleKeyboardInput();
         }
         else HandleSerialInput();
+        
+        if (Time.frameCount % 10 == 0)
+        {
+            DetectEnemyProximity();
+        }
 
-        DetectEnemyProximity();
+        if (isMoving)
+        {
+           transform.position = Vector3.MoveTowards(transform.position, moveTarget, moveSpeed * Time.deltaTime);
+           if (transform.position == moveTarget) isMoving = false;
+        }
     }
 
     void Fire()
@@ -83,20 +101,20 @@ public class PlaneControllerUnified : MonoBehaviour
         {
             newPosition.x -= moveSpeed * Time.deltaTime;
             targetRotation = Quaternion.Euler(-rotationAmount);
-            //  SendData("L");
+            lastInputTime = Time.time; // Update the input time to prevent bounce
         }
 
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             newPosition.x += moveSpeed * Time.deltaTime;
             targetRotation = Quaternion.Euler(rotationAmount);
-            // SendData("R");
+            lastInputTime = Time.time; // Update the input time to prevent bounce
         }
 
         transform.position = newPosition;
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10);
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && healthScript != null && !healthScript.IsDead())
         {
             Fire();
         }
@@ -105,66 +123,53 @@ public class PlaneControllerUnified : MonoBehaviour
 
     void HandleSerialInput()
     {
+        //if (Time.time - lastSerialInputTime < serialInputDebounceTime) return; // Skip if debounce is active
+       
+       // Only allow movement or actions if enough time has passed since the last input
+        if (Time.time - lastSerialInputTime < 0.1f) // 100ms debounce for movement
+            return;
         Quaternion targetRotation = Quaternion.identity;
 
         if (value == 1) // Left
         {
-            targetRotation = Quaternion.Euler(-rotationAmount);
-            StartCoroutine(SmoothMove(Vector3.left, 0.2f)); // beweeg soepel
-            StartCoroutine(ResetRotationAfterDelay());
-            value = 0;
+           moveTarget = transform.position + Vector3.left * moveDistance;
+           isMoving = true;
+           targetRotation = Quaternion.Euler(-rotationAmount);
+           value = 0;
+           lastSerialInputTime = Time.time; // Update the debounce timer
         }
         else if (value == 2) // Right
         {
-            targetRotation = Quaternion.Euler(rotationAmount * 10);
-            StartCoroutine(SmoothMove(Vector3.right, 0.2f));
-            StartCoroutine(ResetRotationAfterDelay());
-            value = 0;
-        }
+           moveTarget = transform.position + Vector3.right * moveDistance;
+           isMoving = true;
+           targetRotation = Quaternion.Euler(rotationAmount);
+           value = 0;
+           lastSerialInputTime = Time.time; // Update the debounce timer
+       }
 
+       if (value == 3) // Shoot
+       {
+          Fire();
+          value = 0;
+       }
+
+       transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10);
+       //lastSerialInputTime = Time.time;  // Update debounce timer for other actions (not shooting)
+    }
+
+    void StartMove(Vector3 direction)
+    {
+        Quaternion targetRotation = direction == Vector3.left ? Quaternion.Euler(-rotationAmount) : Quaternion.Euler(rotationAmount);
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10);
-
-        if (value == 3) // Shoot
-        {
-            Fire();
-            value = 0;
-        }
-    }
-
-    IEnumerator SmoothMove(Vector3 direction, float duration)
-    {
-        float elapsed = 0f;
-        float localSpeed = moveSpeed * 0.1f; // adjust this percentage for less extreme movement
-
-        while (elapsed < duration)
-        {
-            transform.position += direction * (localSpeed * Time.deltaTime);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-    }
-
-    IEnumerator ResetRotationAfterDelay()
-    {
-        yield return new WaitForSeconds(0.1f); // small delay
-        float t = 0f;
-        Quaternion startRot = transform.rotation;
-
-        while (t < 1f)
-        {
-            t += Time.deltaTime * 2; // turning back slower 
-            transform.rotation = Quaternion.Lerp(startRot, startRotation, t);
-            yield return null;
-        }
-
-        transform.rotation = startRotation;
+        transform.position = Vector3.MoveTowards(transform.position, transform.position + direction * moveDistance, moveSpeed * Time.deltaTime);
+        value = 0;
     }
 
 
     // }
     void DetectEnemyProximity()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+       
         bool anyEnemyClose = false;
 
         foreach (var enemy in enemies)
@@ -185,10 +190,14 @@ public class PlaneControllerUnified : MonoBehaviour
         }
 
         if (!anyEnemyClose)
-        {
+        {     
             alerted = false;
         }
+
     }
+
+
+    
         public void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.CompareTag("Energy"))
