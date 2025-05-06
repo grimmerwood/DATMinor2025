@@ -154,7 +154,7 @@ public class Health : MonoBehaviour
     }
     else
     {
-        Destroy(gameObject);
+        Destroy(transform.root.gameObject); // 🔴 🔄 Only this line changed
     }
     }
     internal void AddHealth(int healAmount)

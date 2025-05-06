@@ -49,7 +49,7 @@ public class EnergySpawner : MonoBehaviour
     if (pickup != null)
     {
         //pickup.spManager = PlaneControllerUnified.instance;
-        pickup.energySpawner = this; // optional, if not set in Start
+        //pickup.energySpawner = this; // optional, if not set in Start
     }
     }
 
