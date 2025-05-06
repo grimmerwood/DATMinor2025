@@ -19,25 +19,10 @@ public class WaveSpawner : MonoBehaviour
     private float spawnTimer;
 
     public List<GameObject> spawnedEnemies = new List<GameObject>();
-
-    public ObjectPool enemyPoolPrefab; // Create different pools for each enemy type if needed
-    public int poolSize = 10; 
-    private Dictionary<string, ObjectPool> enemyPools;
     // Start is called before the first frame update
     void Start()
     {
         GenerateWave();
-        enemyPools = new Dictionary<string, ObjectPool>();
-
-        foreach (Enemy e in enemies)
-        {
-            // Initialize object pools for each enemy type
-            ObjectPool pool = new GameObject(e.enemyPrefab.name + "_Pool").AddComponent<ObjectPool>();
-            pool.prefab = e.enemyPrefab;
-            pool.poolSize = poolSize;
-            pool.transform.SetParent(this.transform);
-            enemyPools[e.enemyPrefab.name] = pool;
-        }
     }
 
     // Update is called once per frame
@@ -46,34 +31,13 @@ public class WaveSpawner : MonoBehaviour
         spawnedEnemies.RemoveAll(item => item == null);
 
         //Debug.Log(spawnedEnemies.Count);
-        if (spawnTimer <= 0)  
-        {          
+        if (spawnTimer <= 0)
+        {
             //spawn an enemy
             if (enemiesToSpawn.Count > 0)
             {
-                GameObject prefab = enemiesToSpawn[0];
-                if (enemyPools.TryGetValue(prefab.name, out ObjectPool pool))
-                {
-                    GameObject enemy = pool.GetObject();
-                    if (enemy != null)
-                   {
-                   enemy.transform.position = spawnLocation[spawnIndex].position;
-                   enemy.transform.rotation = Quaternion.identity;
-                   
-                   // Assign this pool to the enemy, so it can return itself to the pool when it dies
-                   EnemyController enemyController = enemy.GetComponent<EnemyController>();
-                   if (enemyController != null)
-                   {
-                       enemyController.SetPool(pool);
-                   }
-                   enemy.SetActive(true);
-                   spawnedEnemies.Add(enemy);
-                   }
-              else
-               {
-                Debug.LogWarning("No pooled enemy available for " + prefab.name);
-               }
-                enemiesToSpawn.RemoveAt(0);
+                GameObject enemy = (GameObject)Instantiate(enemiesToSpawn[0], spawnLocation[spawnIndex].position, Quaternion.identity); // spawn first enemy in our list
+                enemiesToSpawn.RemoveAt(0); // and remove it
                 spawnedEnemies.Add(enemy);
                 spawnTimer = spawnInterval;
 
@@ -104,7 +68,6 @@ public class WaveSpawner : MonoBehaviour
             GenerateWave();
         }
     }
-}
 
     public void GenerateWave()
     {
@@ -128,8 +91,6 @@ public class WaveSpawner : MonoBehaviour
         //  -> if we have no points left, leave the loop
 
         List<GameObject> generatedEnemies = new List<GameObject>();
-        int safety = 1000; // prevent infinite loop
-        
         while (waveValue > 0 || generatedEnemies.Count < 50)
         {
             int randEnemyId = Random.Range(0, enemies.Count);
