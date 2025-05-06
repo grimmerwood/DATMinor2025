@@ -17,7 +17,8 @@ GameObject:
   - component: {fileID: 2480364185971664509}
   - component: {fileID: 7633972281220145230}
   - component: {fileID: 324573437713127204}
-  m_Layer: 3
+  - component: {fileID: 8797081750649146389}
+  m_Layer: 8
   m_Name: Bullet2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,4 +192,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firingSpeed: 0.1
+  moveSpeed: 10
+  lifetime: 3
+  damage: 1
   fireSound: {fileID: 0}
+--- !u!136 &8797081750649146389
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8967837404143453211}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.50000006
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

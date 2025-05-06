@@ -8,7 +8,10 @@ public class Health : MonoBehaviour
 {
     private PlaneControllerUnified playerController;
     [Tooltip("How much damage this entity takes before it dies.")]
-    public float maximumHitPoints = 3;
+    public float maximumHitPoints = 10;
+    public int startingHitPoints = 5;
+
+    private float currentHitPoints;
 
     [Tooltip("The number of points that will be awarded upon death. Only enemies should have points.")]
     public int pointValue;
@@ -25,7 +28,7 @@ public class Health : MonoBehaviour
     [Tooltip("How long this object is invincible after taking damage.")]
     public float invincibleDuration = 1f;
 
-    private float currentHitPoints;
+    
     private bool isInvincible = false;
     private float invincibilityTimer = 0f;
 
@@ -39,7 +42,7 @@ public class Health : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentHitPoints = maximumHitPoints;
+        currentHitPoints = startingHitPoints;
 
     if (GetComponent<Collider>() == null)
     {
@@ -92,7 +95,7 @@ public class Health : MonoBehaviour
     }
     public void ResetHealth()
     {
-    currentHitPoints = maximumHitPoints;
+    currentHitPoints = startingHitPoints;
 
     if (UIController.Instance != null && isPlayer)
     {
@@ -156,7 +159,7 @@ public class Health : MonoBehaviour
     }
     internal void AddHealth(int healAmount)
     {
-        throw new NotImplementedException();
+        Heal(healAmount);
     }
 
     public bool IsDead()

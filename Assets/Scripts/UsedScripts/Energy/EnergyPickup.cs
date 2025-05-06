@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class EnergyPickup : MonoBehaviour
 {
@@ -10,13 +11,15 @@ public class EnergyPickup : MonoBehaviour
     public float floatSpeed = 5f;
     public float floatHeight = 0.5f;
     public float rotationSpeed = 45f;
-    public int healAmount = 5;
+    public int healAmount = 1;
     public float moveSpeedZ= -1f; // Speed at which it moves toward player
     public GameObject healthPopupPrefab;
     public EnergySpawner energySpawner;
     private float startY;
-    private float pickupDelay = 0.2f; // wait before being collectible
-    private float spawnTime;    
+    private float pickupDelay = 0.5f; // wait before being collectible
+    private float spawnTime;  
+
+    private bool hasBeenCollected = false;  
     
     void Start()
     {
@@ -61,11 +64,14 @@ public class EnergyPickup : MonoBehaviour
 
    
     void OnCollisionEnter(Collision other)
-    {            
-       if (Time.time - spawnTime < pickupDelay)
-       return; // too soon, ignore    
-        if (other.gameObject.CompareTag("Player"))
+    {      
+       if (hasBeenCollected) return;      
+       if (Time.time - spawnTime < pickupDelay) return; // too soon, ignore    
+        if (other.gameObject.CompareTag("Player") )
         {  
+            // Mark as collected
+            hasBeenCollected = true;
+            
             Health playerHealth = other.gameObject.GetComponent<Health>();
             if (playerHealth != null)
             {
@@ -79,13 +85,20 @@ public class EnergyPickup : MonoBehaviour
             Canvas canvas = GameObject.FindObjectOfType<Canvas>();
             if (canvas != null && healthPopupPrefab != null)
             {
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-            GameObject popup = Instantiate(healthPopupPrefab, screenPos, Quaternion.identity, canvas.transform);
+                Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+                GameObject popup = Instantiate(healthPopupPrefab, screenPos, Quaternion.identity, canvas.transform);
+            
+            // ✅ Set the text to "+1 Health"
+            TMP_Text textComponent = popup.GetComponent<TMP_Text>();
+            if (textComponent != null)
+            {
+                textComponent.text = "+" + healAmount + " Health";
             }
             
+            }
+            
+        
         }
-            
-            
            EnergySpawner spawner = FindObjectOfType<EnergySpawner>();
            if (energySpawner != null)
         {
@@ -107,7 +120,7 @@ public class EnergyPickup : MonoBehaviour
             
             Destroy(gameObject);  // Energy disappears
 
-        }
+    }
 
     public void SendData(string message)  //an own made methode that takes a parameter of a string which is defined as a variable called "message"
     {

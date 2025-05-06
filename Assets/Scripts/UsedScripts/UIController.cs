@@ -23,7 +23,7 @@ public class UIController : MonoBehaviour
     public TMP_Text healthText;
 
     [Tooltip("The prefix to display before the health.")]
-    public string healthTextPrefix = "HEALTH: ";
+    public string healthTextPrefix = "Health: ";
 
     [Tooltip("A reference to the win screen game object. We will enable this when we win.")]
     public GameObject winScreen;
