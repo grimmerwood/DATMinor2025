@@ -72,6 +72,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BulletUpgrade2
       objectReference: {fileID: 0}
+    - target: {fileID: 8967837404143453211, guid: e682280162a10b54188503396939cdfd, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

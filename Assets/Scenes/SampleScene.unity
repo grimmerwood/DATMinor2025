@@ -1688,34 +1688,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7159612425499703429, guid: 8af6ed78e927c44afa0222e7532fa459, type: 3}
   m_PrefabInstance: {fileID: 2927726564026976399}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1934733163 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6541795408846765414, guid: f2e8c20358febc04ab6ecb150b0acdcb, type: 3}
-  m_PrefabInstance: {fileID: 7434674071667108992}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1934733171 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5873521774056433628, guid: f2e8c20358febc04ab6ecb150b0acdcb, type: 3}
-  m_PrefabInstance: {fileID: 7434674071667108992}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1934733172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1934733163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e436f590cf03ff42a73d642f4ed3da9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 8967837404143453211, guid: 39867225c0027c54ca54e77936d89f05, type: 3}
-  firePoint: {fileID: 1934733171}
-  bulletSpeed: 9.36
-  bulletsPerShot: 1
-  spreadAngle: 30
-  shootInterval: 1.5
 --- !u!1 &1972451540
 GameObject:
   m_ObjectHideFlags: 0
@@ -1839,7 +1811,6 @@ GameObject:
   - component: {fileID: 2141340426}
   - component: {fileID: 2141340427}
   - component: {fileID: 2141340429}
-  - component: {fileID: 2141340428}
   - component: {fileID: 2141340431}
   - component: {fileID: 2141340430}
   m_Layer: 0
@@ -1886,25 +1857,6 @@ MonoBehaviour:
   spawnIndex: 0
   waveDuration: 20
   spawnedEnemies: []
---- !u!114 &2141340428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141340424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6297d980d8087534798d2c890d20c929, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maximumHitPoints: 10
-  startingHitPoints: 5
-  pointValue: 0
-  isPlayer: 0
-  hitSound: {fileID: 0}
-  deathSound: {fileID: 0}
-  invincibleDuration: 1
 --- !u!54 &2141340429
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2220,17 +2172,10 @@ PrefabInstance:
       propertyPath: maximumHitPoints
       value: 3
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 795628765363168441, guid: f2e8c20358febc04ab6ecb150b0acdcb, type: 3}
-    - {fileID: 7386910488808131208, guid: f2e8c20358febc04ab6ecb150b0acdcb, type: 3}
-    - {fileID: 2026527228923559530, guid: f2e8c20358febc04ab6ecb150b0acdcb, type: 3}
-    - {fileID: 3294355302007648967, guid: f2e8c20358febc04ab6ecb150b0acdcb, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6541795408846765414, guid: f2e8c20358febc04ab6ecb150b0acdcb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1934733172}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f2e8c20358febc04ab6ecb150b0acdcb, type: 3}
 --- !u!1001 &8265344144366609742
 PrefabInstance:
@@ -2356,7 +2301,7 @@ MonoBehaviour:
   rotationAmount: {x: 0, y: 45, z: 0}
   moveDistance: 1.5
   alertDistance: 5
-  KeyBoardUse: 1
+  KeyBoardUse: 0
   isPlayerAlive: 1
 --- !u!114 &8265344144366609750
 MonoBehaviour:

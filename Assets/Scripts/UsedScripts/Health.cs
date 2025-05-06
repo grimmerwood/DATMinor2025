@@ -66,7 +66,7 @@ public class Health : MonoBehaviour
             if (invincibilityTimer <= 0f)
             {
                 isInvincible = false;
-                Debug.Log($"{gameObject.name} is no longer invincible.");
+                //Debug.Log($"{gameObject.name} is no longer invincible.");
             }
         }
     }
@@ -77,7 +77,7 @@ public class Health : MonoBehaviour
         // If we're currently invincible, ignore the damage.
         if (isInvincible)
         {
-            Debug.Log($"{gameObject.name} is invincible and ignored the damage.");
+            //Debug.Log($"{gameObject.name} is invincible and ignored the damage.");
             return;
         }
 
@@ -86,7 +86,7 @@ public class Health : MonoBehaviour
         // Activate invincibility after getting hit.
         isInvincible = true;
         invincibilityTimer = invincibleDuration;
-        Debug.Log($"{gameObject.name} is now invincible for {invincibleDuration} seconds.");
+        //Debug.Log($"{gameObject.name} is now invincible for {invincibleDuration} seconds.");
     }
 
     public void Heal(float healAmount)

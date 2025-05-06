@@ -39,11 +39,14 @@ public class ProjectileSettings : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        
         if (other.CompareTag("Enemy"))
         {
+            Debug.Log("Hit");
             Health enemyHealth = other.GetComponent<Health>();
             if (enemyHealth != null)
             {
+                Debug.Log("Damage");
                 enemyHealth.TakeDamage(damage);
             }
 
