@@ -34,6 +34,8 @@ public class PlaneControllerUnified : MonoBehaviour
     private bool isMoving = false;
     private float lastInputTime; // To handle debouncing in Unity side
     private float lastSerialInputTime = 0f;
+
+    public ObjectPool bulletPool; // Assign this in Inspector (pool with projectilePrefab)
     
     private List<GameObject> enemies = new List<GameObject>();
     void Start()
@@ -69,23 +71,20 @@ public class PlaneControllerUnified : MonoBehaviour
 
     void Fire()
     {
-        if (projectilePrefab == null)
+        if (bulletPool == null)
         {
-            Debug.LogWarning("Missing projectile prefab.");
+            Debug.LogWarning("Bullet pool not assigned.");
             return;
         }
 
-        ProjectileSettings settings = projectilePrefab.GetComponent<ProjectileSettings>();
-        if (settings == null)
-        {
-            Debug.LogWarning("ProjectileSettings missing.");
-            return;
-        }
-
-        if (Time.time - lastTimeFired > settings.firingSpeed)
+        if (Time.time - lastTimeFired > projectilePrefab.GetComponent<ProjectileSettings>().firingSpeed)
         {
             lastTimeFired = Time.time;
-            Instantiate(projectilePrefab, spawnPoint.position, Quaternion.identity);
+            
+            GameObject bullet = bulletPool.GetObject();
+            bullet.transform.position = spawnPoint.position;  
+            bullet.transform.rotation = Quaternion.identity;
+            
             SendToSerial("H"); // Notify Arduino: bullet hit enemy
             Debug.Log("H send to Arduino");
             
