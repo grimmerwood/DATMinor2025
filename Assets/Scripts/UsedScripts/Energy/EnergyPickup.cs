@@ -72,6 +72,9 @@ public class EnergyPickup : MonoBehaviour
                playerHealth.Heal(healAmount);
                Debug.Log("Player healed by: " + healAmount);
             }
+            // Cache position BEFORE destroying this GameObject
+            Vector3 cachedPosition = transform.position;
+           
            // Get canvas and convert world position to screen position
             Canvas canvas = GameObject.FindObjectOfType<Canvas>();
             if (canvas != null && healthPopupPrefab != null)
@@ -108,13 +111,17 @@ public class EnergyPickup : MonoBehaviour
 
     public void SendData(string message)  //an own made methode that takes a parameter of a string which is defined as a variable called "message"
     {
-        StartCoroutine(SendSerialMessage(message));
+        if (Time.time - lastSentTime >= 0.1f)  // 100 ms cooldown
+        {
+            StartCoroutine(SendSerialMessage(message));
+        }
+        
     }
     IEnumerator SendSerialMessage(string message) //Coroutine, a special methods that can temporarily pause and resume later without blocking the main thread of the game.
     {
         while (!spManager.isReady)  // Extra check to avoid sending too early
         {
-            Debug.Log("Waiting before sending data...");
+            //Debug.Log("Waiting before sending data...");
             yield return null;  // Wait a frame and try again
         }
 
@@ -123,8 +130,8 @@ public class EnergyPickup : MonoBehaviour
             try
             {
                 spManager.serialPort.WriteLine(message);
-                spManager.serialPort.BaseStream.Flush();
-                Debug.Log("Send: " + message);
+                //spManager.serialPort.BaseStream.Flush();
+                //Debug.Log("Send: " + message);
                 lastSentTime = Time.time; // Update the last time it was sent
             }
             catch (System.Exception e)

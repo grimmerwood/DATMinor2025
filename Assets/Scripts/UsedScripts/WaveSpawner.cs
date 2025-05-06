@@ -39,6 +39,7 @@ public class WaveSpawner : MonoBehaviour
                 GameObject enemy = (GameObject)Instantiate(enemiesToSpawn[0], spawnLocation[spawnIndex].position, Quaternion.identity); // spawn first enemy in our list
                 enemiesToSpawn.RemoveAt(0); // and remove it
                 spawnedEnemies.Add(enemy);
+                PlaneControllerUnified.instance?.RegisterEnemy(enemy);
                 spawnTimer = spawnInterval;
 
                 if (spawnIndex + 1 <= spawnLocation.Length - 1)

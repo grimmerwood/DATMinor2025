@@ -55,7 +55,7 @@ public class PlaneControllerUnified : MonoBehaviour
         }
         else HandleSerialInput();
         
-        if (Time.frameCount % 10 == 0)
+        if (Time.frameCount % 10 == 0 && enemies.Count > 0)
         {
             DetectEnemyProximity();
         }
@@ -169,6 +169,7 @@ public class PlaneControllerUnified : MonoBehaviour
     // }
     void DetectEnemyProximity()
     {
+        enemies.RemoveAll(e => e == null); // Clean the list proactively
        
         bool anyEnemyClose = false;
 
@@ -193,9 +194,16 @@ public class PlaneControllerUnified : MonoBehaviour
         {     
             alerted = false;
         }
-
+ 
     }
-
+    public void RegisterEnemy(GameObject enemy)
+   {
+    if (enemy != null && !enemies.Contains(enemy))
+    {
+        enemies.Add(enemy);
+    }
+    enemies.RemoveAll(e => e == null); // Clean up dead entries
+    } 
 
     
         public void OnCollisionEnter(Collision col)
